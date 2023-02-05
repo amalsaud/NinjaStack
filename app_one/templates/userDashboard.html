@@ -1,0 +1,74 @@
+{% extends 'index2.html' %}
+{% block content %}
+<div class="d-flex justify-content-center justify-content-center mb-3">
+    <div class="align-items-center">
+
+        <div class="row mt-5 mt-1 ">
+            <div class="span6">
+                <h1 class="mt-4">All Users</h1>
+                                            
+                <div class="row mb-3">
+                    <div class="mt-5">
+                        <table class="table table-striped mb-2">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Created At</th>
+                                    <th scope="col">User Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td scope="row">
+                                        {{user.id}}
+                                    </td>
+                                    <td scope="row">
+                                        <form class="form align-items-center" action="/users/show/{{ user.id }}"
+                                            method="POST">
+
+                                            {% csrf_token %}
+                                            <button class="btn btn-link" type="submit">{{user.first_name}}
+                                                {{user.last_name}}</button>
+
+
+                                        </form>
+                                    </td>
+                                    <td scope="row">
+                                        <div class="form">
+                                            {{user.email}}
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form">
+                                            {{user.created_at}}
+                                        </div>
+                                    </td>
+                                    {% if user.is_admin %}
+                                    <td>
+                                        <div class="form">
+                                            admin
+                                        </div>
+                                    </td>
+                                    {% else %}
+                                    <td>
+                                        <div class="form">
+                                            normal
+                                        </div>
+                                    </td>
+                                    {% endif %}
+                                    <td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

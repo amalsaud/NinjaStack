@@ -1,0 +1,67 @@
+{% extends 'index2.html' %}
+{% block content %}
+<div class="ml-2 justify-content-center align-items-center">
+    <ul class="messages">
+        {% for message in messages %}
+        <p {% if message.tags %} class="alert alert-{{message.tags}}" {% endif %}>{{message}}</p>
+        {% endfor %}
+    </ul>
+</div>
+<div class="d-flex justify-content-center justify-content-center">
+    <div class="align-items-center">
+        <h2 class="white mt-2 mb-4 text-center">Edit Profile</h2>
+        <div class="row ml-5 mt-1 ">
+            <div class="span6">
+                <div>
+                    <form class="form align-items-cente  ml-5" action="/users/edit/{{user.id}}" method="POST">
+                        <h5 class="mt-4">Edit Information</h5>
+                        <div class="row align-items-center  mt-3 mb-2">
+                            <input type="text" class="form-control" name="email" value="{{user.email}}" placeholder="Email" required>
+                        </div>
+                        <div class="row align-items-center  mt-3 mb-2">
+                            <input type="text" class="form-control" name="first_name" value="{{user.first_name}}" placeholder="First Name" required>
+                               
+                        </div>
+                        <div class="row align-items-center  mt-3 mb-2">
+                            <input type="text" class="form-control" value="{{user.last_name}}" name="last_name"
+                                placeholder="Last Name" required>
+                        </div>
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <input type="submit" value="save">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="ml-auto mr-5">
+                <form class="form align-items-cente mr-5" action="/userEditPassword/{{user.id}}" method="POST">
+                    <h5 class="mt-4">Change Password</h5>
+                    <div class="row align-items-center  mt-3 mb-2">
+                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="row align-items-center  mt-3 mb-2">
+                        <input type="password" class="form-control" name="confirmPW" 
+                        placeholder="Confirm Password" required>
+                    </div>
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <input type="submit" value="save">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="mt-2">
+            <h5 class="ml-4">Edit Description :</h5>
+            <form class="form align-items-cente text-left" action="/userEditDesc/{{user.id}}" method="POST">
+                <div class="row align-items-center mb-2">
+                    <textarea class="form-control" cols="100" rows="5" placeholder="{{user.desc}}"  name="desc"></textarea>
+                </div>
+                {% csrf_token %}
+                <div class="row">
+                    <input type="submit" value="save">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

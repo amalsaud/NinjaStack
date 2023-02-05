@@ -1,0 +1,132 @@
+{% extends 'index2.html' %}
+{% block content %}
+<div class="d-flex justify-content-center justify-content-center mb-3 mt-4">
+    <div class="align-items-center">
+        <div class="row m-auto">
+            <div class="span6">
+                <div class="row align-items-center mb-2">
+
+                    <h1>{{user.first_name}} {{user.last_name}}</h1>
+                </div>
+                <div class="row align-items-center mb-2">
+                    <p>Registed at: {{user.created_at|date:"M d, Y"}}</p>
+                </div>
+                <div class="row align-items-center mb-2">
+                    <p>User ID: #{{user.id}}</p>
+                </div>
+                <div class="row align-items-center mb-2">
+                    <p>Email address: {{user.email}}</p>
+                </div>
+                <div class="row align-items-center mb-2">
+                    {% if user.desc %}
+                    <p>Descripion: {{ user.desc }}</p>
+                    {% endif %}
+                </div>
+                <form class="form align-items-center mb-5" action="/post_message/{{user.id}}" method="post">
+                    <h4>Leave a message for {{user.first_name}}</h4>
+                    <div class="row align-items-center mt-3 mb-2">
+                        <textarea class="form-control" cols="100" rows="5" name="message"></textarea>
+                    </div>
+                    <div class="text-end">
+                        {% csrf_token %}
+                        <div class="row text-right">
+                            <input type="submit" value="post">
+                        </div>
+                    </div>
+                </form>
+                {% for message in user.usermessages.all|dictsortreversed:"created_at" %}
+                
+                <!-- main row -->
+                <div class="mb-5 mx-3">
+                    <div class="row">
+                        <div class="col">
+                            <label class="form-label">{{message.user.first_name}} {{message.user.last_name}}
+                                Wrote</label>
+                        </div>
+                        <div class="col">
+                            <label class="d-flex flex-row-reverse">{{message.created_at|timesince}} ago
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row mb-2 shadow">
+                        <p class="m-3">{{message.message}}</p>
+                    </div>
+                 
+
+        {% for comment in message.comments.all|dictsortreversed:"created_at" %}
+                  
+                    <div class="mx-5">
+                        <div class="row">
+                            <div class="col">
+                    <form class="align-items-center" action="/users/show/{{ comment.user.id }}">
+    <button class="btn btn-link">{{comment.user.first_name}} {{comment.user.last_name}}</button>
+    <span>Wrote</span>
+                                    
+                                </form>
+                                
+                            </div>
+                            <div>
+                                <label class="d-flex flex-row-reverse">{{comment.created_at|timesince}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1 shadow">
+                            <p class="m-3">{{comment.comment}}</p>
+                        </div>
+                        <!----------------------------------------------------------->
+                            <div class="mb-4">
+                                <form action="{% url 'blogpost_like' user.id %}" method="POST">
+                                    {% csrf_token %}
+                                                    
+                            {% if myuser in comment.likes.all %}
+                            <button type="submit" name="blogpost_id" value="{{comment.id}}" 
+                            class="btn btn-light" id="like">unlike</button>  
+                                {% else %}
+                             <button type="submit" name="blogpost_id" value="{{comment.id}}" 
+                             class="btn btn-light" id="like">like</button> 
+                              {% endif %}
+                            <strong class="text-secondary">
+                                {{ comment.number_of_likes }} Like{{ comment.number_of_likes|pluralize }}</strong>
+                                <!--- likes -->
+                                {% if comment.number_of_likes != 0 %}
+                            <div class="dropdown text-right">
+                                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                 likes
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    {% for user in comment.likes.all %}
+                                  <a class="dropdown-item">{{ user.first_name}} {{user.last_name }}</a>
+                                  {% endfor %}
+                                </div>
+                              </div>   
+                              {% endif %}
+                            </form>
+                            </div>
+                            
+                        <!----------------------------------------------------------->
+                    </div>
+                    {% endfor %}
+                    <form class="form align-items-center" action="/post_comment/{{message.id}}" method="post">
+                        <textarea cols="form-control" name="comment" class="form-control m-3 " placeholder="write a comment .."
+                            required></textarea>
+                        <div class="text-end">
+                            {% csrf_token %}
+                            <input type="hidden" name="user" value="{{user.id}}">
+
+                            <div class="row text-right">
+                                <input value="post" type="submit">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- main row -->
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+  

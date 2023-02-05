@@ -1,0 +1,63 @@
+{% extends 'index2.html' %}
+{% block content %}
+<div class="ml-2 justify-content-center align-items-center">
+    <ul class="messages">
+        {% for message in messages %}
+        <p {% if message.tags %} class="alert alert-{{message.tags}}" {% endif %}>{{message}}</p>
+        {% endfor %}
+    </ul>
+</div>
+<div class="d-flex justify-content-center justify-content-center mb-3">
+    <div class="align-items-center">
+        <div class="row ml-5 mt-1 ">
+            <div class="span6">
+                <h2 class="mt-2 mb-4 text-center">Edit User #{{user.id}} info</h2>
+                <div>
+                    <form class="form align-items-cente text-left" action="/users/Adminedit/{{user.id}}"
+                        method="POST">
+                        <div class="row align-items-center  mt-2 mb-2">
+                            <input type="text" class="form-control" name="email" value="{{user.email}}" placeholder="Email" required>
+                        </div>
+                        <div class="row align-items-center  mt-3 mb-2">
+                            <input type="text" class="form-control" name="first_name" value="{{user.first_name}}"placeholder="First Name" equired>
+                        </div>
+                        <div class="row align-items-center  mt-3 mb-2">
+                            <input type="text" class="form-control" value="{{user.last_name}}" name="last_name" placeholder="Last Name" required>
+                               
+                        </div>
+                        {% csrf_token %}
+                        <div class="row align-items-center  mt-3 mb-2">
+                        </div>
+                        <div class="row align-items-center  mt-3 mb-2" >
+                            <select name="level" class="form-control" required>
+                                <option value="" disabled selected hidden>user level</option>
+                                <option value="True">admin</option>
+                                <option value="False">normal</option>
+                            </select>
+                        </div>
+                        <div class="row text-right">
+                            <input value="save" type="submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="ml-auto mt-5">
+                <form class="form align-items-cente text-left" action="/adminEditPassword/{{user.id}}" method="POST">
+                    <div class="row align-items-center  mt-4 mb-2">
+                        <input type="password" class="form-control" name="password"
+                        placeholder="Password " required>
+                    </div>
+                    <div class="row align-items-center  mt-3 mb-2">
+                        <input type="password" class="form-control" name="confirmPW" 
+                        placeholder="Confirm Password" required>
+                    </div>
+                    {% csrf_token %}
+                    <div class="row text-right">
+                        <input value="update" type="submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
